@@ -74,7 +74,8 @@ class FighterCard extends StatelessWidget {
               tag: fighter.heroId,
               child: CachedNetworkImage(
                 placeholder: (context, url) => Image.asset('assets/img/loading.gif'),
-                imageUrl: fighter.imageUrl
+                imageUrl: fighter.imageUrl,
+                errorWidget: (context, url, error) => const Icon(Icons.image_not_supported_outlined, size: 100.0),
               ),
             ),
           ),

@@ -129,7 +129,10 @@ class FighterInfo extends StatelessWidget {
                   Expanded(
                     child: Hero(
                       tag: fighter.heroId,
-                      child: CachedNetworkImage(imageUrl: fighter.imageUrl)
+                      child: CachedNetworkImage(
+                        imageUrl: fighter.imageUrl,
+                        errorWidget: (context, url, error) => const Icon(Icons.image_not_supported_outlined, size: 150.0 ),
+                      )
                     )
                   )
                 ],
