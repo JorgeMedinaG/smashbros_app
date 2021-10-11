@@ -1,12 +1,5 @@
-// To parse this JSON data, do
-//
-//     final fighter = fighterFromJson(jsonString);
 
-import 'dart:convert';
-// TODO:Check this later
-// Fighter fighterFromJson(String str) => Fighter.fromJson(json.decode(str));
-
-// String fighterToJson(Fighter data) => json.encode(data.toJson());
+import 'package:flutter/material.dart';
 
 class Fighter {
     Fighter({
@@ -25,19 +18,20 @@ class Fighter {
     String objectId;
     String name;
     String universe;
-    String price;
+    int price;
     bool popular;
     int rate;
     String downloads;
     String description;
     String createdAt;
     String imageUrl;
+    UniqueKey heroId = UniqueKey();
 
     factory Fighter.fromJson(Map<String, dynamic> json) => Fighter(
         objectId: json["objectID"],
         name: json["name"],
         universe: json["universe"],
-        price: json["price"],
+        price: int.tryParse(json["price"]) ?? 0,
         popular: json["popular"],
         rate: json["rate"],
         downloads: json["downloads"],

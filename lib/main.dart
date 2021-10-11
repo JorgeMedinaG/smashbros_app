@@ -16,7 +16,7 @@ class AppState extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (BuildContext context) => UniverseProvider(), lazy: false,),
-        ChangeNotifierProvider(create: (BuildContext context) => FighterProvider(), lazy: false,)
+        ChangeNotifierProvider(create: (BuildContext context) => FighterProvider(), lazy: false,),
       ],
       child: const MyApp(),
     );
@@ -28,8 +28,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    
+
     return MaterialApp(
-      title: 'Smash Bros App',
+      title: 'Smash Fighters App',
+      debugShowCheckedModeBanner: false,
       routes: getRoutes(),
       initialRoute: 'onBoard',
       theme: ThemeData.light().copyWith(

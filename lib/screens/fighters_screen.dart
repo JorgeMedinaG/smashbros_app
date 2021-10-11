@@ -12,7 +12,7 @@ class FightersListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final UniverseProvider _universeProvider = Provider.of<UniverseProvider>(context);
-    final FighterProvider _fighterProvider = Provider.of<FighterProvider>(context);
+    final FighterProvider  _fighterProvider  = Provider.of<FighterProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -26,12 +26,15 @@ class FightersListScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         actions: [
-          IconButton(onPressed: (){}, icon: const Icon(Icons.filter_list_outlined, color: Colors.black, size: 28.0))
+          IconButton(
+            onPressed: () => Navigator.of(context).pushNamed('filters'), 
+            icon: Icon(Icons.filter_list_outlined, color: _fighterProvider.activeFilter ? const Color.fromRGBO(219, 48, 105, 1) : Colors.black, size: 28.0)
+          )
         ],
       ),
       body: Column(
         children: [
-          UniverseScroll(universeProvider: _universeProvider),
+          UniverseScroll(universeProvider: _universeProvider, fighterProvider: _fighterProvider),
           Padding(
             padding: const EdgeInsets.only(left: 14.0, right: 6.0, bottom: 20.0),
             child: Row(
@@ -51,7 +54,7 @@ class FightersListScreen extends StatelessWidget {
               ],
             ),
           ),
-          FightersGridView(fighterProvider: _fighterProvider),
+          FightersGridView(fighterProvider: _fighterProvider, universeProvider: _universeProvider,),
           
         ]
       )

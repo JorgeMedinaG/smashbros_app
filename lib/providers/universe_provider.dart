@@ -12,13 +12,13 @@ class UniverseProvider extends ChangeNotifier{
 
 
   UniverseProvider() {
-    print("Provider Inicializado");
+    
     getUniverseList(); 
   }
   
-  Universe _selectedUniverse = Universe(objectId: "2332", name : "All");
-  Universe get selectedUniverse => _selectedUniverse;
-  set selectedUniverse(Universe value){
+  Universe? _selectedUniverse;
+  Universe? get selectedUniverse => _selectedUniverse;
+  set selectedUniverse(Universe? value){
     _selectedUniverse = value;
     notifyListeners();
   }
@@ -27,7 +27,11 @@ class UniverseProvider extends ChangeNotifier{
 
     final Uri url = Uri.https(_baseurl, 'universes');
     final jsonData = await _getRequest(url);
-    universeList = List<Universe>.from(jsonData.map((e) => Universe.fromJson(e)));
+    Universe all = Universe(objectId: "3789", name: "All", description: "");
+    _selectedUniverse = all;
+    universeList.add(all);
+    universeList.addAll(List<Universe>.from(jsonData.map((e) => Universe.fromJson(e))));
+    // universeList = List<Universe>.from(jsonData.map((e) => Universe.fromJson(e)));
     notifyListeners();
   }
 
@@ -39,7 +43,7 @@ class UniverseProvider extends ChangeNotifier{
     try {
       response = await http.get(url);
     } catch (e) {
-      print(e.toString());
+      (e.toString());
     }
 
     if (response?.statusCode == 200){

@@ -6,9 +6,14 @@ class UniverseScroll extends StatelessWidget {
   const UniverseScroll({
     Key? key,
     required UniverseProvider universeProvider,
-  }) : _universeProvider = universeProvider, super(key: key);
+    required FighterProvider fighterProvider,
+  }) :   
+  _universeProvider = universeProvider,
+  _fighterProvider = fighterProvider,
+  super(key: key);
 
   final UniverseProvider _universeProvider;
+  final FighterProvider _fighterProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +22,7 @@ class UniverseScroll extends StatelessWidget {
       width: double.infinity,
       height: 39,
       child:  ListView.builder(
+        physics: const PageScrollPhysics(),
         itemCount: _universeProvider.universeList.length,
         scrollDirection: Axis.horizontal,
         controller: ScrollController(),
@@ -25,7 +31,15 @@ class UniverseScroll extends StatelessWidget {
           Universe universe = _universeProvider.universeList[index];
           
           return GestureDetector(
-            onTap: () => _universeProvider.selectedUniverse = universe,
+            onTap: () {
+              _universeProvider.selectedUniverse = universe;
+              if (universe.name == "All"){
+                _fighterProvider.getFighterList();
+              } else {
+                _fighterProvider.getFightersByUniverse(universe.name);
+              }
+              _fighterProvider.clearFilter();
+            },
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 10.0),
               width: 125.0,
@@ -41,7 +55,7 @@ class UniverseScroll extends StatelessWidget {
                 textAlign: TextAlign.center,
                   style: TextStyle(
                     color: (_universeProvider.selectedUniverse == universe) ? Colors.white : const Color.fromRGBO(219, 48, 105, 1),
-                    fontSize: 15.0
+                    fontSize: 15.0,
                   ),
                 ),
               ),
