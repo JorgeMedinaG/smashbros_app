@@ -40,12 +40,38 @@ class Fighter {
         imageUrl: json["imageURL"],
     );
 
+    factory Fighter.fromDBMap(Map<String, dynamic> json) => Fighter(
+        objectId: json["objectID"],
+        name: json["name"],
+        universe: json["universe"],
+        price: json["price"],
+        popular: (json["popular"] == 1 ) ? true : false,
+        rate: json["rate"],
+        downloads: json["downloads"],
+        description: json["description"],
+        createdAt: json["created_at"],
+        imageUrl: json["imageURL"],
+    );
+
     Map<String, dynamic> toJson() => {
         "objectID": objectId,
         "name": name,
         "universe": universe,
         "price": price,
         "popular": popular,
+        "rate": rate,
+        "downloads": downloads,
+        "description": description,
+        "created_at": createdAt,
+        "imageURL": imageUrl,
+    };
+
+    Map<String, dynamic> toDBMap() => {
+        "objectID": objectId,
+        "name": name,
+        "universe": universe,
+        "price": price,
+        "popular": popular ? 1 : 0,
         "rate": rate,
         "downloads": downloads,
         "description": description,

@@ -1,14 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'package:smashbros_app/models/fighter.dart';
+import 'package:smashbros_app/services/db_service.dart';
 export 'package:smashbros_app/models/fighter.dart';
 
 class FighterProvider extends ChangeNotifier {
 
   FighterProvider(){
-    getFighterList();
+    initializeFighters();
   }
 
   final String _baseurl = '593cdf8fb56f410011e7e7a9.mockapi.io';
@@ -61,6 +64,11 @@ class FighterProvider extends ChangeNotifier {
     return [_allFighters.first.price, _allFighters.last.price];
   }
 
+  void initializeFighters() async {
+    await getFighterList();
+    DBService.db.insertAllFighters(_allFighters);
+  }
+
   void clearFilter(){
     _sortRadio = SortValues.nameAsc;
     _priceRange = const RangeValues(100,800);
@@ -71,8 +79,13 @@ class FighterProvider extends ChangeNotifier {
 
   Future<void> getFighterList() async {
     final Uri url = Uri.https(_baseurl, 'fighters');
-    final jsonData = await _getRequest(url);
-    _fighterList = List<Fighter>.from(jsonData.map((e) => Fighter.fromJson(e)));
+    dynamic jsonData;
+    try {     
+      jsonData = await _getRequest(url);
+      _fighterList = List<Fighter>.from(jsonData.map((e) => Fighter.fromJson(e)));
+    } catch (e) {
+      _fighterList = await DBService.db.fighters();
+    }
     _allFighters = fighterList;
     notifyListeners();
   }
@@ -81,8 +94,13 @@ class FighterProvider extends ChangeNotifier {
     final Uri url = Uri.https(_baseurl, 'fighters', {
       'universe' : universeName
     });
-    final jsonData = await _getRequest(url);
-    _fighterList = List<Fighter>.from(jsonData.map((e) => Fighter.fromJson(e)));
+    dynamic jsonData;
+    try {
+      jsonData = await _getRequest(url);
+      _fighterList = List<Fighter>.from(jsonData.map((e) => Fighter.fromJson(e)));
+    } catch (e) {
+      _fighterList = await DBService.db.fightersByUniverse(universeName);
+    }
     notifyListeners();
   }
 
@@ -127,7 +145,7 @@ class FighterProvider extends ChangeNotifier {
         break;
 
     }
-    
+
   
   }
 
@@ -139,14 +157,32 @@ class FighterProvider extends ChangeNotifier {
     try {
       response = await http.get(url);
     } catch (e) {
-      (e.toString());
+      throw Exception();
     }
 
-    if (response?.statusCode == 200){
-     decodedResp = jsonDecode(response?.body ?? '');
+    if (response.statusCode == 200){
+     decodedResp = jsonDecode(response.body);
     }
 
     return decodedResp;
+  }
+
+    Future<bool> _internetAccess() async {
+
+    bool flag = true;
+    
+    while(flag){
+      try {
+        final result = await InternetAddress.lookup('google.com');
+        if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+          await Future.delayed(Duration(seconds: 2));
+          flag = false;
+        }
+      } on SocketException catch (_) {
+        await Future.delayed(Duration(seconds: 3));
+      }
+    }
+    return true;
   }
 
 }

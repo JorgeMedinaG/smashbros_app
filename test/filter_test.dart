@@ -23,6 +23,7 @@ void main() {
         'rate'     : 2
       };
 
+   fighterProvider.activeFilter = true;
    fighterProvider.filterList(filters);
 
     expect(fighterProvider.fighterList.length, 1);
@@ -37,7 +38,15 @@ void main() {
       Fighter(objectId: "fgh", name: "Dark Samus", universe: "Metroid", price: 424, popular: true, rate: 1, downloads: "24099", description: "", createdAt: "", imageUrl: ""),
       Fighter(objectId: "jkl", name: "Ridley", universe: "Metroid", price: 954, popular: true, rate: 5, downloads: "46143", description: "", createdAt: "", imageUrl: ""),
     ];
+
+      Map<String, dynamic> filters = {
+        'priceDown' : 400,
+        'priceUp'   : 1000,
+        'rate'     : 0
+      };
     
+    fighterProvider.activeFilter = true;
+    fighterProvider.filterList(filters);
     fighterProvider.sortList(SortValues.nameAsc);
 
     expect(fighterProvider.fighterList[0].name,"Dark Samus" );

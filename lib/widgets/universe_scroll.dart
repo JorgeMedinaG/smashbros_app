@@ -22,7 +22,7 @@ class UniverseScroll extends StatelessWidget {
       width: double.infinity,
       height: 39,
       child:  ListView.builder(
-        physics: const PageScrollPhysics(),
+        physics: const ScrollPhysics(),
         itemCount: _universeProvider.universeList.length,
         scrollDirection: Axis.horizontal,
         controller: ScrollController(),
@@ -42,7 +42,7 @@ class UniverseScroll extends StatelessWidget {
             },
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 10.0),
-              width: 125.0,
+              width: 160.0,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8.0),
                 color: _universeProvider.selectedUniverse == universe ? const Color.fromRGBO(219, 48, 105, 1) : Colors.white ,
